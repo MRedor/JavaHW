@@ -1,5 +1,6 @@
-package me.MRedor.hw1.HashTable;
+package me.mredor.hw1.hashtable;
 
+import org.jetbrains.annotations.NotNull;
 
 /**
  *    Collection of pairs (String key, String value).
@@ -8,7 +9,8 @@ package me.MRedor.hw1.HashTable;
 
 public class HashTable {
     private int size = 0;
-    private MyList[] table = new MyList[2];
+    private static final int CAPACITY = 2;
+    private MyList[] table = new MyList[CAPACITY];
 
     /**
      *   Gets hashtable's size.
@@ -23,13 +25,12 @@ public class HashTable {
      *    Checks existing of key in hashtable.
      *
      *    @return 'true' if hashtable contains the key 'key' and 'false' otherwise    */
-    public boolean contains(String key) {
+    public boolean contains(@NotNull String key) {
         MyList list = table[getHash(key)];
         if (list == null) {
             return false;
-        } else {
-            return list.contains(key);
         }
+        return list.contains(key);
     }
 
     /**
@@ -37,7 +38,7 @@ public class HashTable {
      *
      *    @return the value with the key 'key' in the hashtable or 'null' if there is no such element    */
     public String get(String key) {
-        MyList list = table[ getHash(key) ];
+        MyList list = table[getHash(key)];
         if (list == null) {
             return  null;
         }
@@ -86,7 +87,7 @@ public class HashTable {
     /**    Removes all elements from hashtable.    */
     public void clear() {
         size = 0;
-        table = new MyList[2];
+        table = new MyList[CAPACITY];
     }
 
     /**    Calculates hash of string 'key'.    */
@@ -97,7 +98,7 @@ public class HashTable {
     /**    Builds new hashtable with double capacity.    */
     private void rebuild() {
         MyList[] old = table;
-        table = new MyList[2 * size];
+        table = new MyList[CAPACITY * size];
         size = 0;
         for (MyList list : old) {
             for (int i = 0; i < list.size(); i++) {

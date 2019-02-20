@@ -1,22 +1,10 @@
-package me.MRedor.hw1.HashTable;
+package me.mredor.hw1.hashtable;
 
 /**  Linked List containing pairs (String key, String value)  */
 public class MyList {
     private int size;
     private Node begin;
     private Node end;
-
-    private static class Node {
-        private String key;
-        private String value;
-        private Node next;
-        private Node previous;
-
-        Node(String key, String value) {
-            this.key = key;
-            this.value = value;
-        }
-    }
 
     /**
      *    Finds the element with key 'key'
@@ -122,11 +110,7 @@ public class MyList {
      *    @return 'true' if there is an element with the key 'key' and 'false' otherwise
      *    */
     public boolean contains(String key) {
-        if (searchByKey(key) == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return searchByKey(key) != null;
     }
 
     /**
@@ -159,4 +143,15 @@ public class MyList {
         }
     }
 
+    private static class Node {
+        private String key;
+        private String value;
+        private Node next;
+        private Node previous;
+
+        Node(String key, String value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
 }
