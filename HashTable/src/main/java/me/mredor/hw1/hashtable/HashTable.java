@@ -59,7 +59,7 @@ public class HashTable {
             previous = get(key);
             remove(key);
         }
-        int hash = getHash(key);
+        var hash = getHash(key);
         if (table[hash] == null) {
             table[hash] = new MyList();
         }
@@ -77,7 +77,7 @@ public class HashTable {
         if (!contains(key)) {
             return null;
         }
-        int hash = getHash(key);
+        var hash = getHash(key);
         String value = table[hash].getValue(key);
         table[hash].remove(key);
         size--;
@@ -110,3 +110,4 @@ public class HashTable {
     }
 
 }
+

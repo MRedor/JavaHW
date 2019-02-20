@@ -15,7 +15,7 @@ public class MyList {
         if (begin == null) {
             return null;
         }
-        Node current = begin;
+        var current = begin;
         while (current != null) {
             if (current.key.equals(key)) {
                 return current;
@@ -52,7 +52,7 @@ public class MyList {
      *       If there was element with the same key, replace the value in this elemet with 'value'
      * */
     public String put(String key, String value) {
-        Node found = searchByKey(key);
+        var found = searchByKey(key);
         if (found == null) {
             add(new Node(key, value));
             return null;
@@ -95,11 +95,11 @@ public class MyList {
      *     @return the value of deleting element (or 'null')
      * */
     public String remove(String key) {
-        Node found = searchByKey(key);
+        var found = searchByKey(key);
         if (found == null) {
             return null;
         }
-        String value = found.value;
+        var value = found.value;
         delete(found);
         return  value;
     }
@@ -123,7 +123,7 @@ public class MyList {
         if ( (index >= size) || (index < 0) ) {
             return null;
         }
-        Node current = begin;
+        var current = begin;
         for (int i = 0; i < index; i++) {
             current = current.next;
         }
@@ -135,7 +135,7 @@ public class MyList {
      *
      *    @return the value of element with key 'key'    */
     public String getValue(String key) {
-        Node found = searchByKey(key);
+        var found = searchByKey(key);
         if (found == null) {
             return null;
         } else {
@@ -155,3 +155,4 @@ public class MyList {
         }
     }
 }
+
