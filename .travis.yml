@@ -1,0 +1,8 @@
+language: java
+os:
+    - linux
+jdk:
+    - oraclejdk11
+env:
+    - PROJECT_DIR=MyTreeSet
+script: cd $PROJECT_DIR && ./gradlew build
