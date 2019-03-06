@@ -44,9 +44,9 @@ public class InjectorTest {
     public void injectorConnectedWithCycle() {
         assertThrows(InjectionCycleException.class, () -> Injector.initialize("me.mredor.injector.AA", A.class));
     }
-    //  public void injectorTestAmbiguousImplementationException(){
-    //      assertThrows(AmbiguousImplementationException.class,
-    //              () -> Injector.initialize("me.mredor.injector.Q3", Q1.class, Q2.class)
-    //      );
-    //  }
+      public void injectorTestAmbiguousImplementationException(){
+          assertThrows(AmbiguousImplementationException.class,
+                  () -> Injector.initialize("me.mredor.injector.Q3", Q1.class, Q2.class)
+          );
+      }
 }
