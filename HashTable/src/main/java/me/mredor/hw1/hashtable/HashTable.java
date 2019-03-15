@@ -37,7 +37,7 @@ public class HashTable {
      *    Gets value by key.
      *
      *    @return the value with the key 'key' in the hashtable or 'null' if there is no such element    */
-    public String get(String key) {
+    public String get(@NotNull String key) {
         MyList list = table[getHash(key)];
         if (list == null) {
             return  null;
@@ -50,7 +50,7 @@ public class HashTable {
      *
      *     @return the previous value of the key 'key'
      *     */
-    public String put(String key, String value) {
+    public String put(@NotNull String key, String value) {
         if (table.length == size) {
             rebuild();
         }
@@ -59,7 +59,7 @@ public class HashTable {
             previous = get(key);
             remove(key);
         }
-        var hash = getHash(key);
+        int hash = getHash(key);
         if (table[hash] == null) {
             table[hash] = new MyList();
         }
@@ -73,11 +73,11 @@ public class HashTable {
      *
      *    @return the deleted value of the key 'key'
      * */
-    public String remove(String key) {
+    public String remove(@NotNull String key) {
         if (!contains(key)) {
             return null;
         }
-        var hash = getHash(key);
+        int hash = getHash(key);
         String value = table[hash].getValue(key);
         table[hash].remove(key);
         size--;
@@ -91,7 +91,7 @@ public class HashTable {
     }
 
     /**    Calculates hash of string 'key'.    */
-    private int getHash(String key) {
+    private int getHash(@NotNull String key) {
         return (Math.abs(key.hashCode()) % table.length);
     }
 
