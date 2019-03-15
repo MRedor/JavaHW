@@ -43,4 +43,30 @@ class BinaryTreeTest {
         assertTrue(tree.remove(19));
         assertFalse(tree.remove(19));
     }
+
+    @Test
+    void iterator() {
+        tree.add(1);
+        tree.add(3);
+        tree.add(2);
+        var iterator = tree.iterator();
+        for (int i = 1; i <= 3; i++) {
+            assertTrue(iterator.hasNext());
+            assertEquals(i, iterator.next().intValue());
+        }
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    void descendingIterator() {
+        tree.add(1);
+        tree.add(3);
+        tree.add(2);
+        var iterator = tree.descendingIterator();
+        for (int i = 3; i > 0; i--) {
+            assertTrue(iterator.hasNext());
+            assertEquals(i, iterator.next().intValue());
+        }
+        assertFalse(iterator.hasNext());
+    }
 }

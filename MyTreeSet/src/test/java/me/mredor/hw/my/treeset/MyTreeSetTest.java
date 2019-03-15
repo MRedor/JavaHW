@@ -153,14 +153,6 @@ class MyTreeSetTest {
     }
 
     @Test
-    void iteratorSimple() {
-        set.addAll(Arrays.asList(1, 2, 3, 4, 5));
-        ArrayList<Integer> array = new ArrayList<>();
-        array.addAll(set);
-        assertArrayEquals(new Integer[] {1, 2, 3, 4, 5}, array.toArray());
-    }
-
-    @Test
     void iteratorAscendingOrder() {
         set.addAll(Arrays.asList(1, 2, 5, 4, 3));
         ArrayList<Integer> array = new ArrayList<>();
@@ -206,5 +198,13 @@ class MyTreeSetTest {
             assertEquals(i, iterator.next().intValue());
         }
         assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    void descendingSetWithRemove() {
+        set.addAll(Arrays.asList(1, 2, 5, 4, 3));
+        MyTreeSet<Integer> descendingSet = (MyTreeSet<Integer>) set.descendingSet();
+        descendingSet.remove(5);
+        assertFalse(set.contains(5));
     }
 }

@@ -1,8 +1,11 @@
 package me.mredor.hw.my.treeset;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Comparator;
 import java.util.Iterator;
 
+/** Binary Search Tree containing elements of type E. Sorting elements with given comparator or using default order. */
 public class BinaryTree<E> {
     private Comparator<? super E> comparator;
     private Node top;
@@ -18,28 +21,27 @@ public class BinaryTree<E> {
         return size;
     }
 
-    private Node find(E element) {
+    private Node find(@NotNull E element) {
         var current = top;
         while (current != null) {
             if (comparator.compare(current.value, element) == 0) {
                 return current;
+            }
+            if (comparator.compare(current.value, element) > 0) {
+                current = current.left;
             } else {
-                if (comparator.compare(current.value, element) > 0) {
-                    current = current.left;
-                } else {
-                    current = current.right;
-                }
+                current = current.right;
             }
         }
         return null;
     }
 
     /** Returns true if the tree contains the element and false otherwise. */
-    public boolean contains(Object element) {
+    public boolean contains(@NotNull Object element) {
         return find((E) element) != null;
     }
 
-    private Node lowerBound(Object element) {
+    private Node lowerBound(@NotNull Object element) {
         var current = top;
         Node result = null;
 
@@ -57,7 +59,7 @@ public class BinaryTree<E> {
 
     /** Adds element to the tree.
      * Returns true if the tree already contains the element and false otherwise. */
-    public boolean add(E element) {
+    public boolean add(@NotNull E element) {
         if (contains(element)) {
             return false;
         }
@@ -83,7 +85,7 @@ public class BinaryTree<E> {
 
     /** Removes element from tree.
      * Returns true if the tree contained element and false otherwise. */
-    public boolean remove(Object element) {
+    public boolean remove(@NotNull Object element) {
         if (!contains(element)) {
             return false;
         }
@@ -197,7 +199,7 @@ public class BinaryTree<E> {
     }
 
     /** Returns the greatest element in this tree strictly less than the given element, or null if there is no such element. */
-    public E lower(E element) {
+    public E lower(@NotNull E element) {
         var current = top;
         Node result = null;
         while (current != null) {
@@ -214,7 +216,7 @@ public class BinaryTree<E> {
     }
 
     /** Returns the greatest element in this tree less than or equal to the given element, or null if there is no such element. */
-    public E floor(E element) {
+    public E floor(@NotNull E element) {
         if (contains(element)) {
             return element;
         }
@@ -222,7 +224,7 @@ public class BinaryTree<E> {
     }
 
     /** Returns the least element in this tree greater than or equal to the given element, or null if there is no such element. */
-    public E ceiling(E element) {
+    public E ceiling(@NotNull E element) {
         if (contains(element)) {
             return element;
         }
@@ -230,7 +232,7 @@ public class BinaryTree<E> {
     }
 
     /** Returns the least element in this tree strictly greater than the given element, or null if there is no such element. */
-    public E higher(E element) {
+    public E higher(@NotNull E element) {
         var current = top;
         Node result = null;
         while (current != null) {
@@ -251,20 +253,20 @@ public class BinaryTree<E> {
 
     /** Returns an iterator over the elements in this tree in ascending order. */
     public Iterator<E> iterator() {
-        return new BinaryTreeIterator(false);
+        return new BinaryTreeIterator(Order.ASCENDING);
     }
 
     /** Returns an iterator over the elements in this tree in descending order. */
     public Iterator<E> descendingIterator() {
-        return new BinaryTreeIterator(true);
+        return new BinaryTreeIterator(Order.DESCENDING);
     }
 
     private class BinaryTreeIterator implements Iterator<E> {
         private Node current = null;
         private Node last = null;
-        private boolean order;
+        private Order order;
 
-        private BinaryTreeIterator(boolean order) {
+        private BinaryTreeIterator(Order order) {
             this.order = order;
             if (top != null) {
                 last = top;
@@ -280,7 +282,7 @@ public class BinaryTree<E> {
         }
 
         private Node getLeft(Node node) {
-            if (!order) {
+            if (order == Order.ASCENDING) {
                 return node.left;
             } else {
                 return node.right;
@@ -288,7 +290,7 @@ public class BinaryTree<E> {
         }
 
         private Node getRight(Node node) {
-            if (!order) {
+            if (order == Order.ASCENDING) {
                 return node.right;
             } else {
                 return node.left;
@@ -330,4 +332,6 @@ public class BinaryTree<E> {
             this.parent = parent;
         }
     }
+
+    enum Order { DESCENDING, ASCENDING }
 }
