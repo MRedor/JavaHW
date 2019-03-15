@@ -1,5 +1,7 @@
 package me.mredor.hw.Trie;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +15,7 @@ public class Trie implements Serializable {
      *    Works in O(|element|).
      *
      *    @return 'true' if there wasn't such string in trie and 'false' otherwise    */
-    public boolean add (String element) {
+    public boolean add(@NotNull String element) {
         var exists = contains(element);
         if (!exists) {
             root.add(element);
@@ -27,9 +29,9 @@ public class Trie implements Serializable {
      *    Works in O(|element|).
      *
      *    @return 'true' if there is string 'element' in trie and 'false' otherwise    */
-    public boolean contains (String element) {
+    public boolean contains(@NotNull String element) {
         var found = root.getNodeByString(element);
-        return (found != null) && found.terminal;
+        return (found != null) && found.isTerminal;
     }
 
     /**
@@ -38,7 +40,7 @@ public class Trie implements Serializable {
      *
      *    @return 'false' if there wasn't such string in the trie and 'true' otherwise
      * */
-    public boolean remove(String element) {
+    public boolean remove(@NotNull String element) {
         var exists = contains(element);
         if (exists) {
             root.delete(element);
@@ -56,7 +58,7 @@ public class Trie implements Serializable {
     }
 
     /**    Counts how many elements in the trie starts with such prefix. Works in O(|prefix|).    */
-    public int howManyStartWithPrefix(String prefix) {
+    public int howManyStartWithPrefix(@NotNull String prefix) {
         var found = root.getNodeByString(prefix);
         return (found == null) ? 0 : found.numberOfStrings;
     }
@@ -74,17 +76,17 @@ public class Trie implements Serializable {
     }
 
     private class Node implements Serializable {
-        private HashMap<Character, Node> next = new HashMap<>();;
+        private HashMap<Character, Node> next = new HashMap<>();
         private int numberOfStrings = 0;
-        private boolean terminal = false;
+        private boolean isTerminal = false;
 
         private void serialize(OutputStream out) throws IOException {
             ObjectOutputStream stream = new ObjectOutputStream(out);
             stream.writeInt(numberOfStrings);
-            stream.writeBoolean(terminal);
+            stream.writeBoolean(isTerminal);
             stream.writeInt(next.size());
             stream.flush();
-            for (Map.Entry<Character, Node> current : next.entrySet()) {
+            for (var current : next.entrySet()) {
                 stream.writeChar(current.getKey());
                 stream.flush();
                 current.getValue().serialize(out);
@@ -95,7 +97,7 @@ public class Trie implements Serializable {
         private void deserialize(InputStream in) throws IOException {
             var stream = new ObjectInputStream(in);
             numberOfStrings = stream.readInt();
-            terminal = stream.readBoolean();
+            isTerminal = stream.readBoolean();
             int count = stream.readInt();
             for (int i = 0; i < count; i++) {
                 Character letter = stream.readChar();
@@ -126,7 +128,7 @@ public class Trie implements Serializable {
                 current = current.next.get(letter);
                 current.numberOfStrings--;
             }
-            current.terminal = false;
+            current.isTerminal = false;
         }
 
         private void add(String string) {
@@ -140,7 +142,7 @@ public class Trie implements Serializable {
                 current = current.next.get(letter);
                 current.numberOfStrings++;
             }
-            current.terminal = true;
+            current.isTerminal = true;
         }
 
     }
