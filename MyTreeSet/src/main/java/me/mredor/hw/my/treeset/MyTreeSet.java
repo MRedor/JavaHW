@@ -14,8 +14,7 @@ public class MyTreeSet<E> extends AbstractSet<E> implements MyTreeSetInterface<E
 
     /** Constructs a new, empty tree set, sorted according to the natural ordering of its elements. */
     public MyTreeSet() {
-        Comparator<? super E> comparator =  (o1, o2) -> ((Comparable) o1).compareTo(o2) ;
-        tree = new BinaryTree<>(comparator);
+        this((o1, o2) -> ((Comparable) o1).compareTo(o2));
     }
 
     /** Constructs a new, empty tree set, sorted according to the specified comparator. */

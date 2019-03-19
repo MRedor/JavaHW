@@ -95,54 +95,58 @@ public class BinaryTree<E> {
         return true;
     }
 
-    private void removeNode(Node node) {
-        if (node.left == null) {
-            if (node.parent == null) {
-                top = node.right;
-                if (top != null) {
-                    top.parent = null;
-                }
-                return;
+    private void removeNodeWithoutLeft(Node node) {
+        if (node.parent == null) {
+            top = node.right;
+            if (top != null) {
+                top.parent = null;
             }
-            if (node.parent.left == node) {
-                node.parent.left = node.right;
-            } else {
-                node.parent.right = node.right;
-            }
+            return;
+        }
+        if (node.parent.left == node) {
+            node.parent.left = node.right;
+        } else {
+            node.parent.right = node.right;
+        }
 
-            if (node.right != null) {
-                node.right.parent = node.parent;
-            }
-            return;
+        if (node.right != null) {
+            node.right.parent = node.parent;
         }
-        if (node.left.right == null) {
-            if (node.parent != null) {
-                if (node.parent.left == node) {
-                    node.parent.left = node.left;
-                } else {
-                    node.parent.right = node.left;
-                }
+    }
+
+    private void removeNodeWithLeftButWithoutLeftRight(Node node) {
+        if (node.parent != null) {
+            if (node.parent.left == node) {
+                node.parent.left = node.left;
+            } else {
+                node.parent.right = node.left;
             }
+        }
+        node.left.parent = node.parent;
+        node.left.right = node.right;
+        if (node.right != null) {
+            node.right.parent = node.left;
+        }
+        if (node.left.parent == null) {
+            top = node.left;
+        }
+    }
+
+    private void updateParentOfDeletingRightSon(Node node) {
+        if (node.left != null) {
+            node.parent.right = node.left;
             node.left.parent = node.parent;
-            node.left.right = node.right;
-            if (node.right != null) {
-                node.right.parent = node.left;
-            }
-            if (node.left.parent == null) {
-                top = node.left;
-            }
-            return;
+        } else {
+            node.parent.right = null;
         }
+    }
+
+    private void removeNodeWithLeftAndLeftRight(Node node) {
         var newNode = node.left;
         while (newNode.right != null) {
             newNode = newNode.right;
         }
-        if (newNode.left != null) {
-            newNode.parent.right = newNode.left;
-            newNode.left.parent = newNode.parent;
-        } else {
-            newNode.parent.right = null;
-        }
+        updateParentOfDeletingRightSon(newNode);
         if (node.parent != null) {
             if (node.parent.left == node) {
                 node.parent.left = newNode;
@@ -160,6 +164,18 @@ public class BinaryTree<E> {
         if (newNode.parent == null) {
             top = newNode;
         }
+    }
+
+    private void removeNode(Node node) {
+        if (node.left == null) {
+            removeNodeWithoutLeft(node);
+            return;
+        }
+        if (node.left.right == null) {
+            removeNodeWithLeftButWithoutLeftRight(node);
+            return;
+        }
+        removeNodeWithLeftAndLeftRight(node);
     }
 
     /** Returns the first (lowest) element currently in this tree. */
