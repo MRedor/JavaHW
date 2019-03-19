@@ -66,13 +66,17 @@ public class Trie implements Serializable {
     /**    Converts the trie into byte sequence.
      *     @throws IOException if couldn't write properly to the given output stream.  */
     public void serialize(OutputStream out) throws IOException {
-        root.serialize(out);
+        try (var dataStream = new DataOutputStream(out)) {
+            root.serialize(dataStream);
+        }
     }
 
     /**    Decodes new trie from byte sequenсe and replace current with new.
      *     @throws IOException if couldn't read properly to the given output stream. */
     public void deserialize(InputStream in) throws IOException {
-        root.deserialize(in);
+        try (var dataStream = new DataInputStream(in)) {
+            root.deserialize(dataStream);
+        }
     }
 
     private class Node implements Serializable {
@@ -80,29 +84,31 @@ public class Trie implements Serializable {
         private int numberOfStrings = 0;
         private boolean isTerminal = false;
 
-        private void serialize(OutputStream out) throws IOException {
-            ObjectOutputStream stream = new ObjectOutputStream(out);
+        private void serialize(DataOutputStream stream) throws IOException {
             stream.writeInt(numberOfStrings);
+            System.out.println(numberOfStrings);
             stream.writeBoolean(isTerminal);
+            System.out.println(isTerminal);
             stream.writeInt(next.size());
+            System.out.println(next.size());
             stream.flush();
             for (var current : next.entrySet()) {
                 stream.writeChar(current.getKey());
+                System.out.println(current.getKey());
                 stream.flush();
-                current.getValue().serialize(out);
+                current.getValue().serialize(stream);
             }
             stream.flush();
         }
 
-        private void deserialize(InputStream in) throws IOException {
-            var stream = new ObjectInputStream(in);
+        private void deserialize(DataInputStream stream) throws IOException {
             numberOfStrings = stream.readInt();
             isTerminal = stream.readBoolean();
             int count = stream.readInt();
             for (int i = 0; i < count; i++) {
                 Character letter = stream.readChar();
                 Node node = new Node();
-                node.deserialize(in);
+                node.deserialize(stream);
                 next.put(letter, node);
             }
         }

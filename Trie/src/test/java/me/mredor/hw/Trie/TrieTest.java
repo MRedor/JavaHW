@@ -63,13 +63,13 @@ class TrieTest {
     }
 
     @Test
-    void serialize() throws IOException {
+    void serializeWithDeserialize() throws IOException {
         trie.add("MRedor");
         trie.add("Mary");
         trie.add("Pasha");
 
         var stream = new ByteArrayOutputStream();
-        assertDoesNotThrow(() -> trie.serialize(stream)); ;
+        assertDoesNotThrow(() -> trie.serialize(stream));
         var newTrie = new Trie();
         newTrie.deserialize(new ByteArrayInputStream(stream.toByteArray()));
         assertEquals(3, newTrie.size());
@@ -77,4 +77,59 @@ class TrieTest {
         assertTrue(newTrie.contains("Mary"));
         assertTrue(newTrie.contains("Pasha"));
     }
+
+    @Test
+    void serializeOnly() throws IOException {
+        trie.add("MR");
+        trie.add("Ma");
+        var stream = new ByteArrayOutputStream();
+        assertDoesNotThrow(() -> trie.serialize(stream));
+        var output = new ByteArrayOutputStream();
+        var dataOutput = new DataOutputStream(output);
+        dataOutput.writeInt(2);
+        dataOutput.writeBoolean(false);
+        dataOutput.writeInt(1);
+        dataOutput.writeChar('M');
+        dataOutput.writeInt(2);
+        dataOutput.writeBoolean(false);
+        dataOutput.writeInt(2);
+        dataOutput.writeChar('a');
+        dataOutput.writeInt(1);
+        dataOutput.writeBoolean(true);
+        dataOutput.writeInt(0);
+        dataOutput.writeChar('R');
+        dataOutput.writeInt(1);
+        dataOutput.writeBoolean(true);
+        dataOutput.writeInt(0);
+        assertEquals(stream.toString(), output.toString());
+    }
+
+    @Test
+    void deserializeOnly() throws IOException {
+        trie.add("MR");
+        trie.add("Ma");
+        var output = new ByteArrayOutputStream();
+        var dataOutput = new DataOutputStream(output);
+        dataOutput.writeInt(2);
+        dataOutput.writeBoolean(false);
+        dataOutput.writeInt(1);
+        dataOutput.writeChar('M');
+        dataOutput.writeInt(2);
+        dataOutput.writeBoolean(false);
+        dataOutput.writeInt(2);
+        dataOutput.writeChar('R');
+        dataOutput.writeInt(1);
+        dataOutput.writeBoolean(true);
+        dataOutput.writeInt(0);
+        dataOutput.writeChar('a');
+        dataOutput.writeInt(1);
+        dataOutput.writeBoolean(true);
+        dataOutput.writeInt(0);
+        var newTrie = new Trie();
+        newTrie.deserialize(new ByteArrayInputStream(output.toByteArray()));
+        assertTrue(newTrie.contains("MR"));
+        assertTrue(newTrie.contains("Ma"));
+        assertFalse(newTrie.contains("Pasha"));
+    }
+
 }
