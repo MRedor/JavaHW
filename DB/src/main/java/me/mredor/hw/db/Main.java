@@ -19,54 +19,60 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        DataBase dataBase = new DataBase("PhoneBook");
+        PhoneBook book = new PhoneBook();
         Scanner input = new Scanner(System.in);
-
-        while(true) {
-            int command = input.nextInt();
-            if (command == 0) {
-                break;
-            }
-            if (command == 1) {
-                String name = input.next();
-                String number = input.next();
-                dataBase.addRecord(name, number);
-            }
-            if (command == 2) {
-                String name = input.next();
-                List<Record> numbers = dataBase.getByName(name);
-                for (Record current: numbers) {
-                    System.out.println(current.getNumber());
+        int command = -1;
+        System.out.println("Hello, it's a PhoneBook application! \n Available actions: ");
+        System.out.println("         \"0\"               - close the app ");
+        System.out.println("     \"1 name number\"        - add new pair (name, number)");
+        System.out.println("       \"2 name\"            - find all telephone numbers with given name");
+        System.out.println("       \"3 number\"           - find all users with given number");
+        System.out.println("     \"4 name number\"        - delete pair from book");
+        System.out.println("   \"5 name number newName\"  - change name in pair");
+        System.out.println("  \"6 name number newNumber\" - change number in pair");
+        System.out.println("          \"7\"               - print all pairs in the book");
+        while (command != 0) {
+            command = input.nextInt();
+            switch (command) {
+                case 1: {
+                    String name = input.next();
+                    String number = input.next();
+                    book.add(name, number);
+                    break;
                 }
-            }
-            if (command == 3) {
-                String number = input.next();
-                List<Record> names = dataBase.getByNumber(number);
-                for (Record current : names) {
-                    System.out.println(current.getName());
+                case 2: {
+                    String name = input.next();
+                    book.printAllNumbersByName(name);
+                    break;
                 }
-            }
-            if (command == 4) {
-                String name = input.next();
-                String number = input.next();
-                dataBase.deleteRecord(name, number);
-            }
-            if (command == 5) {
-                String name = input.next();
-                String number = input.next();
-                String newName = input.next();
-                dataBase.changeName(name, number, newName);
-            }
-            if (command == 6) {
-                String name = input.next();
-                String number = input.next();
-                String newNumber = input.next();
-                dataBase.changeNumber(name, number, newNumber);
-            }
-            if (command == 7) {
-                List<Record> records = dataBase.getAllRecords();
-                for (Record current: records) {
-                    current.print();
+                case 3: {
+                    String number = input.next();
+                    book.printAllNamesByNumber(number);
+                    break;
+                }
+                case 4: {
+                    String name = input.next();
+                    String number = input.next();
+                    book.delete(name, number);
+                    break;
+                }
+                case 5: {
+                    String name = input.next();
+                    String number = input.next();
+                    String newName = input.next();
+                    book.changeName(name, number, newName);
+                    break;
+                }
+                case 6: {
+                    String name = input.next();
+                    String number = input.next();
+                    String newNumber = input.next();
+                    book.changeNumber(name, number, newNumber);
+                    break;
+                }
+                case 7: {
+                    book.printAll();
+                    break;
                 }
             }
         }
