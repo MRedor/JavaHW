@@ -3,6 +3,8 @@ os:
     - linux
 jdk:
     - oraclejdk11
+services:
+    - mongodb
 env:
     - PROJECT_DIR=DB
 script: cd $PROJECT_DIR && ./gradlew build
