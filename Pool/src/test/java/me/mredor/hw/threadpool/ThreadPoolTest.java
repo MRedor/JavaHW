@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ThreadPoolTest {
+    final int SLEEP_TIME = 1000;
 
     @Test
     void testSimple() throws LightFuture.LightExecutionException {
@@ -21,12 +22,12 @@ class ThreadPoolTest {
     @Test
     void testManyThreads() throws InterruptedException {
         var pool = new ThreadPool<Integer>(10);
-        var check = new int[1000];
+        var check = new int[SLEEP_TIME];
         for (int i = 0; i < 1000; i++) {
             final int j = i;
             pool.add(() -> check[j] = j);
         }
-        Thread.sleep(1000);
+        Thread.sleep(SLEEP_TIME);
         for (int i = 0; i < 1000; i++) {
             assertEquals(i, check[i]);
         }
@@ -36,10 +37,8 @@ class ThreadPoolTest {
     void testShutdownOneThread() throws InterruptedException {
         var pool = new ThreadPool<Integer>(1);
         pool.shutdown();
-        Thread.sleep(1000);
-        var task = pool.add(() -> 19);
-        Thread.sleep(1000);
-        assertFalse(task.isReady());
+        Thread.sleep(SLEEP_TIME);
+        assertThrows(IllegalStateException.class, () -> pool.add(() -> 19) );
     }
 
     @Test
@@ -48,10 +47,8 @@ class ThreadPoolTest {
         pool.add(() -> 17);
         pool.add(() -> 17);
         pool.shutdown();
-        Thread.sleep(1000);
-        var task = pool.add(() -> 19);
-        Thread.sleep(1000);
-        assertFalse(task.isReady());
+        Thread.sleep(SLEEP_TIME);
+        assertThrows(IllegalStateException.class, () -> pool.add(() -> 19) );
     }
 
     @Test
@@ -63,7 +60,7 @@ class ThreadPoolTest {
         var threads = pool.getClass().getDeclaredField("threads");
         threads.setAccessible(true);
         pool.shutdown();
-        Thread.sleep(1000);
+        Thread.sleep(SLEEP_TIME);
         for (Thread thread : (Thread[]) threads.get(pool)) {
             assertFalse(thread.isAlive());
         }
@@ -102,7 +99,7 @@ class ThreadPoolTest {
                 Thread.yield();
             }
         });
-        Thread.sleep(1000);
+        Thread.sleep(SLEEP_TIME);
         assertFalse(task.isReady());
     }
 
