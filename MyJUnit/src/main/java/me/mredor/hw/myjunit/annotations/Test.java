@@ -15,8 +15,14 @@ import java.lang.annotation.Target;
 public @interface Test {
 
     String EMPTY = "";
+    /** Gets the reason to ignore the test.
+     * Default value -- EMPTY -- if test shouldn't be ignored. */
     String ignore() default EMPTY;
 
+    /** Gets class (extended throwable) which is expected to be thrown in the test.
+     * Default value -- NoException.class -- if no throws are expected */
     Class<? extends Throwable> expected() default NoException.class;
+
+    /** Special exception class means no exception. */
     class NoException extends Throwable {}
 }
