@@ -16,13 +16,13 @@ import java.util.List;
  * After all test methods should be invoked all methods with annotation AfterClass
  */
 public class MyJUnitInvoker {
-    Class clazz;
-    List<Method> beforeClassMethods;
-    List<Method> beforeMethods;
-    List<Method> afterMethods;
-    List<Method> afterClassMethods;
-    List<TestMethod> testMethods;
-    Object instance;
+    private Class clazz;
+    private List<Method> beforeClassMethods;
+    private List<Method> beforeMethods;
+    private List<Method> afterMethods;
+    private List<Method> afterClassMethods;
+    private List<TestMethod> testMethods;
+    private Object instance;
 
     /** Creates invoker for class clazz. */
     public MyJUnitInvoker(Class clazz) {
