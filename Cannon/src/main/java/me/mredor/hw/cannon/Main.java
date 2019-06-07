@@ -62,10 +62,10 @@ public class Main extends Application {
     }
 
     private void addTarget(Group group) {
-        target = new Target(group);
+        target = new Target(group, background);
     }
     private void addCannon(Group group, Target target) {
-        cannon = new Cannon(group, target);
+        cannon = new Cannon(group, target, background);
     }
 
     private void addBackground(Group group) {

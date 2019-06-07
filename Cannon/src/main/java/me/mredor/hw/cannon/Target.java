@@ -6,7 +6,7 @@ import javafx.scene.shape.Circle;
 
 import java.util.Random;
 
-import static me.mredor.hw.cannon.Background.getYByX;
+import static java.lang.Math.sqrt;
 
 /** Class of game target */
 public class Target {
@@ -15,12 +15,14 @@ public class Target {
     private double centerX;
     private double centerY;
     private Circle view;
+    private Background background;
 
     /** Randomly generating target and adds it to the view as red circle */
-    public Target(Group group) {
+    public Target(Group group, Background background) {
+        this.background = background;
         var random = new Random();
         centerX = random.nextInt(MAX_X);
-        centerY = getYByX(centerX);
+        centerY = background.getYByX(centerX);
         view = new Circle(centerX, centerY, TARGET_RADIUS);
         view.setFill(Color.RED);
         group.getChildren().add(view);
@@ -38,6 +40,6 @@ public class Target {
 
     /** Calculates distanse between point (x, y) with given coordinates and target */
     public double distance(double x, double y) {
-        return (x - centerX) * (x - centerX) + (y - centerY) * (y - centerY);
+        return sqrt((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY));
     }
 }
